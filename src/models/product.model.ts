@@ -27,4 +27,15 @@ export class ProductModel {
         const parsedData = JSON.stringify(parsedFile);
         await writeFile(this._path, parsedData, "utf-8");
     }
+
+    public async updateProduct(product: Product) {
+        const file = await readFile(this._path, "utf-8");
+        if(!file) return { message: "Not data found to update" };
+        const parsedFile: typeof product[] = JSON.parse(file);
+        const productIdx = parsedFile.findIndex(element => element.productid);
+        parsedFile[productIdx] = product;
+        const parsedData = JSON.stringify(parsedFile);
+        await writeFile(this._path, parsedData, "utf-8");
+        this.setFile();
+    }
 }

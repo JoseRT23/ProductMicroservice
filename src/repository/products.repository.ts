@@ -10,7 +10,7 @@ class ProductsRepository {
     }
 
     public getProductById(id: string) {
-        return this.productModel.products.find(prod => prod.id === Number(id));
+        return this.productModel.products.find(prod => prod.productid === Number(id));
     }
 
     public createProduct(product: Product) {
@@ -18,6 +18,13 @@ class ProductsRepository {
         return {
             created: true,
             product
+        }
+    }
+
+    public updateProduct(product: Product) {
+        const updatedProduct = this.productModel.updateProduct(product);
+        return {
+            updated: true
         }
     }
 }
