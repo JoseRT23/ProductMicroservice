@@ -1,0 +1,2 @@
+Download pg image
+docker pull postgres
