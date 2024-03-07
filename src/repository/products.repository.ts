@@ -2,30 +2,26 @@ import { Product } from "../interfaces/product.interface";
 import { ProductModel } from "../models/product.model";
 
 class ProductsRepository {
-    private productModel = new ProductModel();
+    private _productModel = new ProductModel();
     constructor() {}
 
-    public getAllProducts() {
-        return this.productModel.products;
+    public async getAllProducts() {
+        return await this._productModel.getProducts();
     }
 
-    public getProductById(id: string) {
-        return this.productModel.products.find(prod => prod.productid === Number(id));
+    public async getProductById(id: string) {
+        const products = await this._productModel.getProducts();
+        return products.find(prod => prod.productid === Number(id));
     }
 
-    public createProduct(product: Product) {
-        this.productModel.createProduct(product);
-        return {
-            created: true,
-            product
-        }
+    public async createProduct(product: Product) {
+        await this._productModel.createProduct(product);
+        return { created: true, product }
     }
 
-    public updateProduct(product: Product) {
-        const updatedProduct = this.productModel.updateProduct(product);
-        return {
-            updated: true
-        }
+    public async updateProduct(id: string, product: Product) {
+        const updatedProduct = await this._productModel.updateProduct(id, product);
+        return { updated: true }
     }
 }
 

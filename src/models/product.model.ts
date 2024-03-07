@@ -2,21 +2,17 @@ import { readFile, writeFile } from "fs/promises";
 import { Product } from "../interfaces/product.interface";
 
 export class ProductModel {
-
-    public products: any[] = [];
     private _path: string = "./db/product.json";
 
-    constructor() {
-        this.setFile();
-    }
+    constructor() { }
 
-    public async setFile(): Promise<void> {
+    public async getProducts(): Promise<Product[]> {
         const file = await readFile(this._path, "utf-8");
-        if (!file) return;
-        this.products = JSON.parse(file);
+        if (!file) return [];
+        return JSON.parse(file);
     }
 
-    public async createProduct(product: Product) {
+    public async createProduct(product: Product): Promise<void> {
         const file = await readFile(this._path, "utf-8");
         if(!file) {
             await writeFile(this._path, JSON.stringify([product]), "utf-8");
@@ -28,14 +24,14 @@ export class ProductModel {
         await writeFile(this._path, parsedData, "utf-8");
     }
 
-    public async updateProduct(product: Product) {
+    public async updateProduct(id: string, product: Product): Promise<void>{
         const file = await readFile(this._path, "utf-8");
-        if(!file) return { message: "Not data found to update" };
         const parsedFile: typeof product[] = JSON.parse(file);
-        const productIdx = parsedFile.findIndex(element => element.productid);
-        parsedFile[productIdx] = product;
+        const productIdx: number = parsedFile.findIndex(element => element.productid === Number(id));
+
+        Object.assign(parsedFile[productIdx], product);
+
         const parsedData = JSON.stringify(parsedFile);
         await writeFile(this._path, parsedData, "utf-8");
-        this.setFile();
     }
 }

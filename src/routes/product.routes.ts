@@ -3,7 +3,7 @@ import ProductController from "../controllers/product.controller";
 
 class ProductRouter {
     public router = Router();
-    public productController = new ProductController();
+    private productController = new ProductController();
 
     constructor() {
         this.initializeRoutes();
